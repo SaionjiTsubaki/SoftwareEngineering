@@ -1,0 +1,60 @@
+<!--pages/date_note/date_note.wxml-->
+<view class="calendar">
+	<view class="title flex">
+		<view class="flex">
+			<picker value="{{selectDay.year+'-'+selectDay.month}}" bindchange="editMonth" mode="date" fields="month" class="year-month">{{selectDay.year}}.{{selectDay.month>9?selectDay.month:"0"+selectDay.month}}</picker>
+			<view class="icon" bindtap="lastMonth" style="transform:rotate(180deg);">
+				<view class="iconfont icon-playfill"></view>
+			</view>
+			<view class="icon" bindtap="nextMonth">
+				<view class="iconfont icon-playfill"></view>
+			</view>
+			<!-- <view class="userinfo userinfo-avatar">
+				<open-data type="userAvatarUrl"></open-data>
+			</view>			 -->
+		</view>
+		<view catchtap="openChange" class="flex open">
+			<view>{{open?"收起":"展开"}}</view>
+			<view style="margin-left:6rpx;font-size:20rpx" class="iconfont icon-{{open?'fold':'unfold'}}"></view>
+		</view>
+
+	</view>
+
+	<!-- 日历头部 -->
+	<view class="flex-around calendar-week">
+		<view class="view">一</view>
+		<view class="view">二</view>
+		<view class="view">三</view>
+		<view class="view">四</view>
+		<view class="view">五</view>
+		<view class="view">六</view>
+		<view class="view">日</view>
+	</view>
+	<view class="line" style="position: relative; top: 10rpx"></view>
+
+	<!-- 日历主体 -->
+	<view class="flex-start flex-wrap calendar-main" style="height:{{dateList.length/7*72}}rpx">
+		<view wx:for="{{dateList}}" wx:key="dateList" class="day">
+			<view class="bg {{(item.year === selectDay.year && item.month === selectDay.month) ? (item.day === selectDay.day?'select':(item.year === today.year && item.month === today.month && item.day === today.day?'today':'')): 'other-month'}}" catchtap="selectChange" data-day="{{item.day}}" data-year="{{item.year}}" data-month="{{item.month}}" data-date-string="{{item.dateString}}">
+				{{item.day}}
+			</view>
+			<view class="spot" wx:if="{{item.spot}}"></view>
+		</view>
+	</view>
+
+	<block wx:if="{{selectDayData}}">
+		<view wx:for="{{selectDayData}}" wx:key="selectDayData">
+			<view class="line"></view>
+			<view class="flex-start flex-wrap calendar-main" bindtap="updateNote" data-title="{{item.title}}" data-content="{{item.content}}">{{item.title}}</view>
+			<image class="" src="../../images/delete.png" style="position: relative; width: 36rpx; height: 36rpx; display: inline-block; box-sizing: border-box; left: 675rpx; top: -75rpx" bindtap="delNote" data-title="{{item.title}}"></image>
+			<view class="line"></view>
+		</view>
+	</block>
+
+	<view class="line"></view>
+	<view class="flex-start flex-wrap calendar-main">
+		<image class="" src="../../images/new_image.png" style="position: relative; width: 54rpx; height: 54rpx; display: block; box-sizing: border-box; left: 167rpx; top: -2rpx"></image>
+		<view class="detail" catchtap="toNote" style="position: relative; left: 167rpx; top: -2rpx">点击添加新的记录</view>
+	</view>
+	<view class="line"></view>
+</view>
